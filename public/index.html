@@ -1,61 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Login System</title>
-
-    <link rel="stylesheet" href="style.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login System</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+  <div class="container">
+    <h1>Login</h1>
 
-    <div class="container">
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
 
-        <h1>Login</h1>
+    <p class="account-text">Don't have an account?</p>
 
-        <input
-            type="email"
-            id="email"
-            placeholder="Email"
-        >
+    <input type="text" id="name" placeholder="Name">
+    <button onclick="register()">Register</button>
 
-        <input
-            type="password"
-            id="password"
-            placeholder="Password"
-        >
+    <p id="message"></p>
+  </div>
 
-        <button onclick="login()">
-            Login
-        </button>
+  <script>
+    const message = document.getElementById("message");
 
-        <p class="account-text">
-            Don't have an account?
-        </p>
+    async function send(url, body) {
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+        const data = await res.json();
+        message.style.color = res.ok ? "green" : "red";
+        message.textContent = data.message || data.error || "Done";
+        return res.ok ? data : null;
+      } catch (err) {
+        message.style.color = "red";
+        message.textContent = "Could not reach the server.";
+        return null;
+      }
+    }
 
-        <input
-            type="text"
-            id="name"
-            placeholder="Name"
-        >
+    async function register() {
+      await send("/api/register", {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value
+      });
+    }
 
-        <button onclick="register()">
-            Register
-        </button>
-
-        <p id="message"></p>
-
-    </div>
-
-    <script src="/app.js"></script>
-
+    async function login() {
+      const data = await send("/api/login", {
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value
+      });
+      if (data) {
+        sessionStorage.setItem("user", JSON.stringify(data.user));
+        window.location.href = "dashboard.html";
+      }
+    }
+  </script>
 </body>
-
 </html>
