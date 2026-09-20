@@ -1,9 +1,11 @@
 const express = require("express");
 const path = require("path");
-const { sql } = require("@vercel/postgres");
+const { neon } = require("@neondatabase/serverless");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+const sql = neon(process.env.DATABASE_URL);
 
 app.use(express.json());
 app.use(express.static(__dirname));
@@ -37,7 +39,7 @@ app.post("/register", async (req, res) => {
     try {
         const existing = await sql`SELECT id FROM users WHERE email = ${cleanEmail}`;
 
-        if (existing.rows.length > 0) {
+        if (existing.length > 0) {
             return res.json({
                 success: false,
                 message: "Email is already registered."
@@ -74,7 +76,7 @@ app.post("/login", async (req, res) => {
             WHERE email = ${cleanEmail} AND password = ${password}
         `;
 
-        const user = result.rows[0];
+        const user = result[0];
 
         if (!user) {
             return res.json({
@@ -106,7 +108,7 @@ app.post("/login", async (req, res) => {
 app.get("/users", async (req, res) => {
     try {
         const result = await sql`SELECT id, name, email FROM users ORDER BY id`;
-        res.json(result.rows);
+        res.json(result);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Could not fetch users." });
