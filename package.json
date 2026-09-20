@@ -1,0 +1,13 @@
+{
+  "name": "raymundodb2",
+  "version": "1.0.0",
+  "description": "Login System",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@vercel/postgres": "^0.10.0",
+    "express": "^5.2.1"
+  }
+}
