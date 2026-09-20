@@ -12,7 +12,6 @@ body {
     min-height: 100vh;
 }
 
-/* LOGIN */
 .container {
     width: 380px;
     max-width: 92%;
@@ -29,7 +28,6 @@ body {
     margin-bottom: 28px;
 }
 
-/* INPUT */
 input {
     width: 100%;
     height: 40px;
@@ -45,11 +43,61 @@ input:focus {
     border: 1px solid #444;
 }
 
-/* BUTTON */
 button {
     width: 100%;
     height: 40px;
     margin-bottom: 14px;
     background: #efefef;
     border: 1px solid #767676;
+    border-radius: 2px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #e2e2e2;
+}
+
+.account-text {
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: 24px;
+}
+
+#message {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.dashboard-container {
+    width: 500px;
+    max-width: 92%;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-container h1,
+.dashboard-container h2 {
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background: #333;
+    color: white;
 }
