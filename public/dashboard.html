@@ -1,99 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Dashboard</title>
-
-    <link rel="stylesheet" href="/style.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+  <div class="dashboard-container">
+    <h1>Dashboard</h1>
+    <h2>Registered Users</h2>
 
-    <div class="dashboard-container">
+    <button onclick="loadUsers()">View Users</button>
 
-        <h1>Dashboard</h1>
+    <table>
+      <thead>
+        <tr><th>ID</th><th>Name</th></tr>
+      </thead>
+      <tbody id="users"></tbody>
+    </table>
 
-        <h2>Registered Users</h2>
+    <button onclick="goBack()">Back to Login</button>
+  </div>
 
-        <button onclick="loadUsers()">
-            View Users
-        </button>
+  <script>
+    async function loadUsers() {
+      const tbody = document.getElementById("users");
+      tbody.innerHTML = "";
+      try {
+        const res = await fetch("/api/users");
+        const users = await res.json();
+        users.forEach(u => {
+          const tr = document.createElement("tr");
+          [u.id, u.name].forEach(value => {
+            const td = document.createElement("td");
+            td.textContent = value;
+            tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        alert("Could not load users.");
+      }
+    }
 
-        <table>
-
-            <thead>
-
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                </tr>
-
-            </thead>
-
-            <tbody id="userTable"></tbody>
-
-        </table>
-
-        <button onclick="logout()">
-            Back to Login
-        </button>
-
-    </div>
-
-    <script>
-
-        function loadUsers() {
-
-            fetch("/users")
-
-                .then(response => response.json())
-
-                .then(users => {
-
-                    const table =
-                        document.getElementById("userTable");
-
-                    table.innerHTML = "";
-
-                    users.forEach(user => {
-
-                        const row =
-                            document.createElement("tr");
-
-                        row.innerHTML = `
-                            <td>${user.id}</td>
-                            <td>${user.name}</td>
-                        `;
-
-                        table.appendChild(row);
-
-                    });
-
-                })
-
-                .catch(error => {
-
-                    console.error(error);
-
-                });
-        }
-
-
-        function logout() {
-
-            window.location.href = "/";
-
-        }
-
-    </script>
-
+    function goBack() {
+      sessionStorage.removeItem("user");
+      window.location.href = "index.html";
+    }
+  </script>
 </body>
-
 </html>
